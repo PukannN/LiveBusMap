@@ -3,3 +3,4 @@
 - `python3 -m venv venv`  
 - `source /venv/bin/activate` 
 - `pip install -r requirements.txt`  
+- VSCode may have some difficulties loading all the pip packages, you may need to restart your IDE
