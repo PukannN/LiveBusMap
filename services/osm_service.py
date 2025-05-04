@@ -1,4 +1,4 @@
-from OSMPythonTools.overpass import Overpass
+from OSMPythonTools.overpass import Overpass, overpassQueryBuilder
 from OSMPythonTools.nominatim import Nominatim
 from OSMPythonTools.api import Api
 from shapely import wkt
@@ -23,3 +23,29 @@ class OSMService:
         place = self.nominatim.query(f"{city}, {country}", wkt="True")
         wkt_string = place.wkt()
         return wkt_string
+    
+    def get_bus_stops(self, city, country):
+        town_name = f'{city}, {country}'
+        town = self.nominatim.query(town_name)
+        area_id = town.areaId()
+
+        # Construct the Overpass query to get bus routes and their stops
+        query = overpassQueryBuilder(
+            area=area_id,
+            elementType='relation',
+            selector='"route"="bus"',
+            includeGeometry=True
+        )
+
+        # Execute the query
+        result = self.overpass.query(query)
+
+        # Process the results
+        bus_routes = result.elements()
+
+        # Print bus routes and their stops
+        for route in bus_routes:
+            print(f"Bus Route: {route.tags().get('ref', 'Unknown')} - {route.tags().get('name', 'Unknown')}")
+            for member in route.members():
+                if member.type() == 'node' and 'highway' in member.tags() and member.tags()['highway'] == 'bus_stop':
+                    print(f"  Bus Stop: {member.tags().get('name', 'Unknown')} - Lat: {member.lat()}, Lon: {member.lon()}")

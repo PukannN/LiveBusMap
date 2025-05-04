@@ -13,6 +13,8 @@ def background_updates():
     while True:
         time.sleep(8)
         print("Updating object data")
+        bus_stops = osm_service.get_bus_stops(CITY, COUNTRY)
+        
 
 @app.route('/')
 def show_map():
@@ -21,7 +23,7 @@ def show_map():
         center_coord = osm_service.get_coordinates(CITY, COUNTRY)
         wkt_data = osm_service.get_wkt(CITY, COUNTRY)
 
-        print(f"Coordinates fetched: {center_coord}, WKT data: {wkt_data}")
+        #print(f"Coordinates fetched: {center_coord}, WKT data: {wkt_data}")
         
         print("Creating base map...")
         folium_map = map_service.create_base_map(center_coord, MAP_ZOOM)
@@ -34,10 +36,11 @@ def show_map():
         
         map_file = 'templates/map.html'
         print(f"Saving map to {map_file}...")
-        map_service.save_map(folium_map, map_file)
+        #map_service.save_map(folium_map, map_file)
+        html_map = folium_map._repr_html_()
         print("Map saved successfully.")
-        
-        return render_template('map.html')  # Fixed the template path
+
+        return render_template('map.html', map=html_map) # Fixed the template path
     
     except Exception as e:
         print(f"Error occurred: {e}")
