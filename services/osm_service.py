@@ -14,7 +14,7 @@ class OSMService:
     def get_coordinates(self, city, country):
         place = self.nominatim.query(f"{city}, {country}")
         data = place.toJSON()[0]
-        map_cords = data["lat"], data["lon"]
+        map_cords = [data["lat"], data["lon"]]
         print(f"Coordinates of {city}: {map_cords}")
         return map_cords
     
@@ -22,5 +22,4 @@ class OSMService:
     def get_wkt(self, city, country):
         place = self.nominatim.query(f"{city}, {country}", wkt="True")
         wkt_string = place.wkt()
-        geom = wkt.loads(wkt_string)
-        return geom
+        return wkt_string

@@ -17,18 +17,30 @@ def background_updates():
 @app.route('/')
 def show_map():
     try:
-        center_coord, wkt_data = osm_service.get_coordinates(CITY, COUNTRY)
+        print(f"Fetching coordinates for CITY: {CITY}, COUNTRY: {COUNTRY}")
+        center_coord = osm_service.get_coordinates(CITY, COUNTRY)
+        wkt_data = osm_service.get_wkt(CITY, COUNTRY)
+
+        print(f"Coordinates fetched: {center_coord}, WKT data: {wkt_data}")
         
+        print("Creating base map...")
         folium_map = map_service.create_base_map(center_coord, MAP_ZOOM)
+        print("Base map created.")
+        
+        print("Adding GeoJSON data to the map...")
         map_service.add_geojson(folium_map, wkt_data)
         
-        map_file = 'templates/map.html'
-        map_service.save_map(folium_map, map_file)
+        print("GeoJSON data added.")
         
-        return render_template('templates/map.html')
+        map_file = 'templates/map.html'
+        print(f"Saving map to {map_file}...")
+        map_service.save_map(folium_map, map_file)
+        print("Map saved successfully.")
+        
+        return render_template('map.html')  # Fixed the template path
     
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error occurred: {e}")
         return "An error occurred while generating the map.", 500
 
 if __name__ == '__main__':
