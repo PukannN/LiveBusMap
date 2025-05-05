@@ -12,6 +12,7 @@ map_service = MapService()
 #marker_position = [0.0, 0.0]
 
 def background_updates():
+    osm_service.get_bus_stops(CITY, COUNTRY)
     while True:
         time.sleep(1)
     # global marker_position
