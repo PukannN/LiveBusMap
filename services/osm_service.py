@@ -25,6 +25,14 @@ class OSMService:
         wkt_string = place.wkt()
         return wkt_string
 
+    def get_bus_stop_location(self, location):
+        result = self.nominatim.query(location)
+        result = result.toJSON()[0]
+        map_cords = [result["lat"], result["lon"]]
+        print(f"Coordinates of {location}: {map_cords}")
+        return map_cords
+    
+
     def get_bus_stops(self, city, country):
         town_name = f'{city}, {country}'
         town = self.nominatim.query(town_name)
@@ -47,6 +55,7 @@ class OSMService:
         # Print bus routes and their stops
         for route in bus_routes:
             #print(f"Bus Route: {route.tags().get('ref', 'Unknown')} - {route.tags().get('name', 'Unknown')}")
+            print(route.tags().get('name'))
             for member in route.members():
                 if member.type() == 'node' and 'highway' in member.tags() and member.tags()['highway'] == 'bus_stop':
                     return f"  Bus Stop: {member.tags().get('name', 'Unknown')} - Lat: {member.lat()}, Lon: {member.lon()}"
