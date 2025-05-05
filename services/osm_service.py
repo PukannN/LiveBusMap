@@ -35,7 +35,7 @@ class OSMService:
             area=area_id,
             elementType='relation',
             selector='"route"="bus"',
-            includeGeometry=True
+            includeGeometry=False,
         )
 
         # Execute the query
@@ -46,7 +46,7 @@ class OSMService:
 
         # Print bus routes and their stops
         for route in bus_routes:
-            print(f"Bus Route: {route.tags().get('ref', 'Unknown')} - {route.tags().get('name', 'Unknown')}")
+            #print(f"Bus Route: {route.tags().get('ref', 'Unknown')} - {route.tags().get('name', 'Unknown')}")
             for member in route.members():
                 if member.type() == 'node' and 'highway' in member.tags() and member.tags()['highway'] == 'bus_stop':
                     return f"  Bus Stop: {member.tags().get('name', 'Unknown')} - Lat: {member.lat()}, Lon: {member.lon()}"

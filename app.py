@@ -12,9 +12,8 @@ map_service = MapService()
 #marker_position = [0.0, 0.0]
 
 def background_updates():
-    osm_service.get_bus_stops(CITY, COUNTRY)
     while True:
-        time.sleep(1)
+        time.sleep(1000)
     # global marker_position
     # center_coord = osm_service.get_coordinates(CITY, COUNTRY)
     # cords = list(center_coord)
@@ -32,6 +31,7 @@ def show_map():
         print(f"Fetching coordinates for CITY: {CITY}, COUNTRY: {COUNTRY}")
         center_coord = osm_service.get_coordinates(CITY, COUNTRY)
         wkt_data = osm_service.get_wkt(CITY, COUNTRY)
+        
 
         print("Creating base map...")
         folium_map = map_service.create_base_map(center_coord, MAP_ZOOM)
