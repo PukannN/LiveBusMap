@@ -3,12 +3,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
     <title>Live Bus View</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .content { width: 1000px; height: 800px; margin: 0 auto; }
+        .leaflet-container { width: 100% !important; height: 100% !important; }
+    </style>
 </head>
 <body>
     <h1>Live Bus View</h1>
+
     <div class="content">{{ map|safe }}</div>
     
 </body>

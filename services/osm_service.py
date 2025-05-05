@@ -4,6 +4,7 @@ from OSMPythonTools.api import Api
 from shapely import wkt
 from shapely.geometry import mapping
 
+
 class OSMService:
     def __init__(self):
         self.nominatim = Nominatim()
@@ -23,7 +24,7 @@ class OSMService:
         place = self.nominatim.query(f"{city}, {country}", wkt="True")
         wkt_string = place.wkt()
         return wkt_string
-    
+
     def get_bus_stops(self, city, country):
         town_name = f'{city}, {country}'
         town = self.nominatim.query(town_name)
@@ -48,4 +49,5 @@ class OSMService:
             print(f"Bus Route: {route.tags().get('ref', 'Unknown')} - {route.tags().get('name', 'Unknown')}")
             for member in route.members():
                 if member.type() == 'node' and 'highway' in member.tags() and member.tags()['highway'] == 'bus_stop':
-                    print(f"  Bus Stop: {member.tags().get('name', 'Unknown')} - Lat: {member.lat()}, Lon: {member.lon()}")
+                    return f"  Bus Stop: {member.tags().get('name', 'Unknown')} - Lat: {member.lat()}, Lon: {member.lon()}"
+                   

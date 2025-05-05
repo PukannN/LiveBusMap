@@ -1,4 +1,5 @@
 import folium
+import folium.map
 from shapely import wkt
 from shapely.geometry import mapping
 
@@ -9,8 +10,8 @@ class MapService:
         return folium.Map(
             location=location,
             zoom_start=zoom, 
-            width=800, 
-            height=600,
+            width=1000, 
+            height=800,
             min_zoom=12,
             )
     
@@ -22,3 +23,11 @@ class MapService:
     @staticmethod
     def save_map(folium_map, filename):
         return folium_map.save(filename)
+
+    @staticmethod
+    def add_marker(folium_map, location, popup_text,):
+        folium.map.Marker(
+            location=location,
+            popup=popup_text,
+        ).add_to(folium_map)
+        return folium_map

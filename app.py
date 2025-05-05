@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for, jsonify
 from config import CITY, COUNTRY, MAP_ZOOM
 from services.osm_service import OSMService
 from services.map_service import MapService
@@ -9,12 +9,21 @@ app = Flask(__name__)
 osm_service = OSMService()
 map_service = MapService()
 
+#marker_position = [0.0, 0.0]
+
 def background_updates():
     while True:
-        time.sleep(8)
-        print("Updating object data")
-        bus_stops = osm_service.get_bus_stops(CITY, COUNTRY)
-        
+        time.sleep(1)
+    # global marker_position
+    # center_coord = osm_service.get_coordinates(CITY, COUNTRY)
+    # cords = list(center_coord)
+    # cords[0] = float(cords[0])
+    # cords[1] = float(cords[1])
+    # marker_position = [cords[0], cords[1]]
+    # while True:
+    #     time.sleep(1)
+    #     marker_position[0] += 0
+    #     marker_position[1] += 0
 
 @app.route('/')
 def show_map():
@@ -23,8 +32,6 @@ def show_map():
         center_coord = osm_service.get_coordinates(CITY, COUNTRY)
         wkt_data = osm_service.get_wkt(CITY, COUNTRY)
 
-        #print(f"Coordinates fetched: {center_coord}, WKT data: {wkt_data}")
-        
         print("Creating base map...")
         folium_map = map_service.create_base_map(center_coord, MAP_ZOOM)
         print("Base map created.")
@@ -36,15 +43,19 @@ def show_map():
         
         map_file = 'templates/map.html'
         print(f"Saving map to {map_file}...")
-        #map_service.save_map(folium_map, map_file)
-        html_map = folium_map._repr_html_()
         print("Map saved successfully.")
 
-        return render_template('map.html', map=html_map) # Fixed the template path
+        html_map = folium_map._repr_html_()
+        return render_template('map.html', map=html_map)
     
     except Exception as e:
         print(f"Error occurred: {e}")
         return "An error occurred while generating the map.", 500
+
+# @app.route('/marker_position')
+# def get_marker_position():
+#     global marker_position
+#     return jsonify({'lat': marker_position[0], 'lng': marker_position[1]})
 
 if __name__ == '__main__':
     update_thread = threading.Thread(target=background_updates)
