@@ -12,6 +12,7 @@ map_service = MapService()
 #marker_position = [0.0, 0.0]
 
 def background_updates():
+
     while True:
         time.sleep(1000)
     # global marker_position
@@ -45,6 +46,15 @@ def show_map():
         map_file = 'templates/map.html'
         print(f"Saving map to {map_file}...")
         print("Map saved successfully.")
+
+        get_bus_stops = osm_service.get_bus_stops(CITY, COUNTRY)
+
+
+
+
+        # loc = osm_service.get_bus_stop_location("Havířov, Dolní Datyně, točna J.Kotase")
+        # map_service.add_marker(folium_map, loc, f"{loc}")
+
 
         html_map = folium_map._repr_html_()
         return render_template('map.html', map=html_map)
