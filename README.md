@@ -1,4 +1,8 @@
-<h1>How to setup:</h1>
+#LiveBusMap
+
+Live map of public transport
+
+## How to setup:
 
 - `python3 -m venv venv`  
 - `source /venv/bin/activate` 
